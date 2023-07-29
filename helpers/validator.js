@@ -12,6 +12,9 @@ class validator{
                 if(taskDetails.description === '' || taskDetails.description === null){
                     errorMsg += "Description cannot be empty. ";
                 } 
+                if(typeof taskDetails.status !== "boolean"){
+                    errorMsg += "Status should be a boolean value. ";
+                } 
                 if(errorMsg.length !== 0){
                     return {
                         "status": false,
