@@ -15,7 +15,7 @@ taskRoutes.get('/:id',(req,res) => {
     const airtribeTask = taskData;
     const taskId = req.params.id;
     const result = airtribeTask.filter(data => data.taskId === taskId);
-    if(result == null || result == undefined || result.length == 0){
+    if(result.length == 0){
         return res.status(404).json({"message" : "Task that you requested does not exist."});
     }
     return res.status(200).json(result);
@@ -32,7 +32,7 @@ taskRoutes.post('/',(req,res) => {
             return res.status(400).json(isValid);
         }
     }catch(e){
-        return res.status(500).json({"message" : "Try has failed. Please try again later!"});
+        return res.status(500).json({"message" : "Task creation failed. Please try again later!"});
     }
 });
 
