@@ -1,6 +1,7 @@
 const taskRoutes = require('express').Router();
 const bodyParser = require('body-parser');
 const taskData = require('../tasks.js');
+const validator = require('../helpers/validator.js');
 const path = require('path');
 const fs = require('fs');
  
@@ -22,10 +23,15 @@ taskRoutes.get('/:id',(req,res) => {
 
 taskRoutes.post('/',(req,res) => {
     try{
-        const taskToAdd = req.body;
-        taskData.push(taskToAdd);
-        return res.status(200).json({"message" : "Task added successfully!."});
-    }catch{
+        const taskDetails = req.body;
+        const isValid = validator.validatorTaskInfo(taskDetails, taskData);
+        if(isValid.status){
+            taskData.push(taskDetails);
+            return res.status(200).json(isValid);
+        }else{
+            return res.status(400).json(isValid);
+        }
+    }catch(e){
         return res.status(500).json({"message" : "Try has failed. Please try again later!"});
     }
 });
