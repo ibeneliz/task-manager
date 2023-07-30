@@ -45,6 +45,16 @@ taskRoutes.get('/:id',(req,res) => {
     return res.status(200).json(result);
 });
 
+taskRoutes.get('/priority/:level',(req,res) => {
+    const airtribeTask = taskData;
+    const level = req.params.level;
+    const result = airtribeTask.filter(data => data.priorityLevel === level);
+    if(result.length == 0){
+        return res.status(404).json({"message" : "Priority level that you requested does not exist."});
+    }
+    return res.status(200).json(result);
+});
+
 taskRoutes.post('/',(req,res) => {
     try{
         const taskDetails = req.body;
@@ -65,9 +75,11 @@ taskRoutes.put('/:id',(req,res) => {
         const taskToUpdate = req.body;
         taskData.filter(task => {
             if(task.taskId == req.params.id){
-                task.title = taskToUpdate.title;
-                task.description = taskToUpdate.description;
-                task.status = taskToUpdate.status;
+                task.title = taskToUpdate.title !== undefined ? taskToUpdate.title : task.title;
+                task.description = taskToUpdate.description !== undefined ? taskToUpdate.taskToUpdate.description : task.description;
+                task.creationDate = taskToUpdate.creationDate !== undefined ? taskToUpdate.creationDate : task.creationDate;
+                task.priorityLevel = taskToUpdate.priorityLevel !== undefined ? taskToUpdate.priorityLevel : task.priorityLevel;
+                task.status = taskToUpdate.status !== undefined ? taskToUpdate.status : task.status;
             }
         });
         return res.status(200).json({"message" : "Task updated successfully!."});
