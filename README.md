@@ -24,53 +24,57 @@ Starting the server - node index.js
 
 1. API to create the task
 
-    Method: POST
-    Payload: {
-                "taskId": "5",
-                "title": "test",
-                "description": "Big O Notation",
-                "creationDate": "2009-12-10T18:30:00.000Z",
-                "priorityLevel": "medium",
-                "status": false
-            }
-    API - http://localhost:3000/tasks/
+    Method: POST  
+    Payload: 
 
+        {
+            "taskId": "5",
+            "title": "test",
+            "description": "Big O Notation",
+            "creationDate": "2009-12-10T18:30:00.000Z",
+            "priorityLevel": "medium",
+            "status": false
+        }
+
+    API - http://localhost:3000/tasks/
 2. API to get all task
 
-    Method: GET
+    Method: GET  
     API - http://localhost:3000/tasks/
 
 3. API to get task by id
 
-    Method: GET
+    Method: GET  
     API - http://localhost:3000/tasks/1
 
 4. API to get task by filtering and sorting
 
-    Method: GET
+    Method: GET  
     API - http://localhost:3000/tasks?sort=creationDate&order=desc
 
 5. API to get task by filtering and sorting
 
-    Method: GET
+    Method: GET  
     API - http://localhost:3000/tasks?sort=creationDate&order=desc
 
 6. API to update task
 
-    Method: PUT
-    Payload - {
+    Method: PUT  
+    Payload -  
+    
+       {
         "priorityLevel": "medium",
         "status": false
-    }
+        }  
     API - http://localhost:3000/tasks/4
 
 7. API to delete task
 
-    Method: DELETE
+    Method: DELETE  
     API - http://localhost:3000/tasks/4
 
 
 8. API to get task by priority
 
-    Method: GET
+    Method: GET  
     API - http://localhost:3000/tasks/priority/high
