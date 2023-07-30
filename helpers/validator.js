@@ -46,6 +46,12 @@ class validator{
         if(valueFound) return false;
         return true;
       }
+    
+    static isTaskFound(taskId, taskData) {
+        let valueFound = taskData.some(el => el.taskId === taskId);
+        if(valueFound) return true;
+        return false;
+      }
 }
 
 module.exports = validator;

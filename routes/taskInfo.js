@@ -1,6 +1,6 @@
 const taskRoutes = require('express').Router();
 const bodyParser = require('body-parser');
-const taskData = require('../tasks.js');
+let taskData = require('../tasks.js');
 const validator = require('../helpers/validator.js');
 const path = require('path');
 const fs = require('fs');
@@ -36,12 +36,11 @@ taskRoutes.get('/',(req,res) => {
 });
 
 taskRoutes.get('/:id',(req,res) => {
-    const airtribeTask = taskData;
     const taskId = req.params.id;
-    const result = airtribeTask.filter(data => data.taskId === taskId);
-    if(result.length == 0){
+    if(!validator.isTaskFound(taskId,taskData)){
         return res.status(404).json({"message" : "Task that you requested does not exist."});
     }
+    const result = taskData.filter(data => data.taskId === taskId);
     return res.status(200).json(result);
 });
 
@@ -72,9 +71,13 @@ taskRoutes.post('/',(req,res) => {
 
 taskRoutes.put('/:id',(req,res) => {
     try{
+        const taskId = req.params.id;
+        if(!validator.isTaskFound(taskId,taskData)){
+            return res.status(404).json({"message" : "Task that you requested does not exist."});
+        }
         const taskToUpdate = req.body;
         taskData.filter(task => {
-            if(task.taskId == req.params.id){
+            if(task.taskId == taskId){
                 task.title = taskToUpdate.title !== undefined ? taskToUpdate.title : task.title;
                 task.description = taskToUpdate.description !== undefined ? taskToUpdate.taskToUpdate.description : task.description;
                 task.creationDate = taskToUpdate.creationDate !== undefined ? taskToUpdate.creationDate : task.creationDate;
@@ -90,11 +93,12 @@ taskRoutes.put('/:id',(req,res) => {
 
 taskRoutes.delete('/:id',(req,res) => {
     try{
-        taskData.filter(task => {
-            if(task.taskId == req.params.id){
-                taskData.pop(task);
-            }
-        });
+        const taskId = req.params.id;
+        if(!validator.isTaskFound(taskId,taskData)){
+            return res.status(404).json({"message" : "Task that you requested does not exist."});
+        }
+        const updatedData = taskData.filter(data => data.taskId != taskId);
+        taskData = updatedData;
         return res.status(200).json({"message" : "Task deleted successfully!."});
     }catch{
         return res.status(500).json({"message" : "Deletion has failed. Please try again later!"});
