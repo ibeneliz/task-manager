@@ -4,6 +4,8 @@ class validator{
             taskDetails.hasOwnProperty("title") &&
             taskDetails.hasOwnProperty("description") &&
             taskDetails.hasOwnProperty("status") && 
+            taskDetails.hasOwnProperty("creationDate") &&
+            taskDetails.hasOwnProperty("priorityLevel") &&
             this.validateUniqueTaskId(taskDetails, taskData)){
                 let errorMsg = "";
                 if(taskDetails.title === '' || taskDetails.title === null){

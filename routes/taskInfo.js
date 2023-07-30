@@ -8,7 +8,22 @@ const fs = require('fs');
 taskRoutes.use(bodyParser.json());
 
 taskRoutes.get('/',(req,res) => {
-    return res.status(200).json(taskData);
+    const creationDate = req.query.creationDate || "desc";
+    const filteredData = taskData.filter(data =>String(data.status).toLowerCase() === req.query.status);
+    let sortedArray = [];
+    const updatedTaskData = filteredData.map(obj => {
+        return {...obj, creationDate: new Date(obj.creationDate)};
+      });
+    if(creationDate === "asc"){
+        sortedArray = updatedTaskData.sort(
+            (objA, objB) => Number(objA.creationDate) - Number(objB.creationDate),
+          );
+    }else{
+        sortedArray = updatedTaskData.sort(
+            (objA, objB) => Number(objB.creationDate) - Number(objA.creationDate),
+          );
+    }   
+    return res.status(200).json(sortedArray);
 });
 
 taskRoutes.get('/:id',(req,res) => {
