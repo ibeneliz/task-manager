@@ -8,21 +8,30 @@ const fs = require('fs');
 taskRoutes.use(bodyParser.json());
 
 taskRoutes.get('/',(req,res) => {
-    const creationDate = req.query.creationDate || "desc";
-    const filteredData = taskData.filter(data =>String(data.status).toLowerCase() === req.query.status);
+    const creationDate = req.query.order || "desc";
     let sortedArray = [];
-    const updatedTaskData = filteredData.map(obj => {
-        return {...obj, creationDate: new Date(obj.creationDate)};
-      });
-    if(creationDate === "asc"){
-        sortedArray = updatedTaskData.sort(
-            (objA, objB) => Number(objA.creationDate) - Number(objB.creationDate),
-          );
+    let filteredData = [];
+    if(req.query.status !== undefined){
+        filteredData = taskData.filter(data =>String(data.status).toLowerCase() === req.query.status);
     }else{
-        sortedArray = updatedTaskData.sort(
-            (objA, objB) => Number(objB.creationDate) - Number(objA.creationDate),
-          );
-    }   
+        filteredData = taskData;
+    }
+    if(req.query.sort !== undefined){
+        const updatedTaskData = filteredData.map(obj => {
+            return {...obj, creationDate: new Date(obj.creationDate)};
+        });
+        if(creationDate === "asc"){
+            sortedArray = updatedTaskData.sort(
+                (objA, objB) => Number(objA.creationDate) - Number(objB.creationDate),
+            );
+        }else{
+            sortedArray = updatedTaskData.sort(
+                (objA, objB) => Number(objB.creationDate) - Number(objA.creationDate),
+            );
+        }   
+    }else{
+        sortedArray = filteredData !== [] ? filteredData : taskData;
+    }
     return res.status(200).json(sortedArray);
 });
 
